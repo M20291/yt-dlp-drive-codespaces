@@ -62,13 +62,20 @@ async function triggerDownload(videoUrl, platform = 'youtube', cookies = '') {
     });
 
     const encodedConfig = Buffer.from(configContent).toString('base64');
-    
+
+    // Get current config file info
+    const currentConfig = await makeRequest(
+      `/repos/${REPO_OWNER}/${REPO_NAME}/contents/config.json`,
+      'GET'
+    );
+
     await makeRequest(
       `/repos/${REPO_OWNER}/${REPO_NAME}/contents/config.json`,
       'PUT',
       {
         message: 'Update config for download',
-        content: encodedConfig
+        content: encodedConfig,
+        sha: currentConfig.sha
       }
     );
 
@@ -93,11 +100,52 @@ async function triggerDownload(videoUrl, platform = 'youtube', cookies = '') {
     console.log('נ”— Codespace URL:', codespaceResponse.web_url);
     console.log('נ“ Codespace ID:', codespaceResponse.id);
 
+    // Wait for codespace to be ready
+    console.log('ג³ Waiting for codespace to be ready...');
+    await waitForCodespaceReady(codespaceResponse.id);
+
+    console.log('ג… Download process completed!');
+    console.log('נ“ Note: The download script should run automatically via postCreateCommand');
+    console.log('נ”— Check the codespace for results: ' + codespaceResponse.web_url);
+
     return codespaceResponse;
   } catch (error) {
     console.error('ג Error triggering download:', error.message);
     process.exit(1);
   }
+}
+
+async function waitForCodespaceReady(codespaceId) {
+  let ready = false;
+  let attempts = 0;
+  const maxAttempts = 30; // 5 minutes max
+
+  while (!ready && attempts < maxAttempts) {
+    await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
+    
+    const codespace = await makeRequest(
+      `/repos/${REPO_OWNER}/${REPO_NAME}/codespaces/${codespaceId}`,
+      'GET'
+    );
+
+    if (codespace.state === 'Available' && codespace.ready) {
+      ready = true;
+    } else {
+      attempts++;
+      console.log(`ג³ Codespace status: ${codespace.state} (attempt ${attempts}/${maxAttempts})`);
+    }
+  }
+
+  if (!ready) {
+    throw new Error('Codespace did not become ready in time');
+  }
+}
+
+async function executeCommandInCodespace(codespaceId, command) {
+  // This would require SSH access or Codespaces API for command execution
+  // For now, we'll rely on the postCreateCommand
+  console.log('נ“ Note: Script execution depends on postCreateCommand');
+  console.log('נ”— Check the codespace logs for progress');
 }
 
 // Get parameters from command line
