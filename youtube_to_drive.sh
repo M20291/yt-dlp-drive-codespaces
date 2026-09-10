@@ -15,6 +15,13 @@ COOKIES_CONTENT="${COOKIES_CONTENT:-$(cat config.json 2>/dev/null | grep -o '"co
 
 # ׳¢׳¨׳›׳™ ׳‘׳¨׳™׳¨׳× ׳׳—׳“׳
 PLATFORM="${PLATFORM:-youtube}"
+
+# ׳׳ ׳׳™׳ ׳₪׳¨׳׳˜׳¨׳™׳ ׳׳©׳•׳ ׳׳§׳•׳, ׳¦׳
+if [ -z "$VIDEO_URL" ]; then
+    echo "ג ׳׳ ׳¡׳•׳₪׳§ ׳§׳™׳©׳•׳¨ ׳׳¡׳¨׳˜׳•׳"
+    echo "ג ן¸  ׳׳ ׳ ׳”׳’׳“׳¨ ׳׳× VIDEO_URL ׳‘׳¡׳‘׳™׳‘׳” ׳׳• ׳‘׳§׳•׳‘׳¥ config.json"
+    exit 1
+fi
 VIDEO_URL="${VIDEO_URL:-}"
 
 if [ -z "$VIDEO_URL" ]; then
