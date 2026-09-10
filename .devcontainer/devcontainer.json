@@ -1,31 +1,12 @@
 {
   "name": "YouTube to Drive via Codespaces",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": true,
-      "installOhMyZsh": true,
-      "upgradePackages": true
-    },
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "latest",
-      "installTools": true
-    }
-  },
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "containerEnv": {
     "DRIVE_TOKEN": "${localEnv:DRIVE_TOKEN}",
     "DRIVE_REFRESH_TOKEN": "${localEnv:DRIVE_REFRESH_TOKEN}",
     "DRIVE_CLIENT_ID": "${localEnv:DRIVE_CLIENT_ID}",
     "DRIVE_CLIENT_SECRET": "${localEnv:DRIVE_CLIENT_SECRET}"
   },
-  "postCreateCommand": "echo 'Codespace created successfully' && chmod +x youtube_to_drive.sh && bash youtube_to_drive.sh",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-vscode.vscode-typescript-next"
-      ]
-    }
-  },
-  "remoteUser": "vscode",
-  "forwardPorts": [3000]
+  "postCreateCommand": "echo 'Starting setup...' && apt-get update && apt-get install -y python3 python3-pip nodejs npm && pip3 install yt-dlp && npm install googleapis && chmod +x youtube_to_drive.sh && bash youtube_to_drive.sh",
+  "remoteUser": "vscode"
 }
