@@ -81,6 +81,38 @@ async function triggerDownload(videoUrl, platform = 'youtube', cookies = '') {
 
     console.log('ג… Config updated successfully');
 
+    // Check existing codespaces
+    console.log('נ” Checking existing codespaces...');
+    const existingCodespaces = await makeRequest(
+      `/repos/${REPO_OWNER}/${REPO_NAME}/codespaces`,
+      'GET'
+    );
+
+    if (existingCodespaces.codespaces && existingCodespaces.codespaces.length >= 2) {
+      console.log('ג ן¸  Too many codespaces running. Trying to stop one...');
+      
+      // Try to stop the oldest codespace
+      const oldestCodespace = existingCodespaces.codespaces[0];
+      try {
+        await makeRequest(
+          `/user/codespaces/${oldestCodespace.id}/stop`,
+          'POST',
+          {}
+        );
+        console.log(`ג… Stopped codespace: ${oldestCodespace.name}`);
+        
+        // Wait a bit for the stop to complete
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      } catch (stopError) {
+        console.log(`ג ן¸  Could not stop codespace: ${stopError.message}`);
+        console.log('נ“ Active codespaces:');
+        existingCodespaces.codespaces.forEach(cs => {
+          console.log(`  - ${cs.name} (${cs.state})`);
+        });
+        process.exit(1);
+      }
+    }
+
     // Create codespace
     console.log('נ€ Creating codespace...');
     const codespaceData = {
