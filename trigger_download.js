@@ -95,6 +95,8 @@ async function triggerDownload(videoUrl, platform = 'youtube', cookies = '') {
       codespaceData
     );
 
+    console.log('נ“ API Response:', JSON.stringify(codespaceResponse, null, 2));
+
     console.log('ג… Codespace created successfully!');
     console.log('נ“ Codespace name:', codespaceResponse.name);
     console.log('נ”— Codespace URL:', codespaceResponse.web_url);
