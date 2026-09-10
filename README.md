@@ -14,21 +14,24 @@
 ## נ“‹ ׳“׳¨׳™׳©׳•׳× ׳׳•׳§׳“׳׳•׳×
 
 - GitHub token ׳¢׳ ׳”׳¨׳©׳׳•׳× `codespace` ׳•-`repo`
-- Google Drive OAuth credentials (׳׳•׳’׳“׳¨׳™׳ ׳›׳׳©׳×׳ ׳™ ׳¡׳‘׳™׳‘׳”)
+- Google Drive OAuth credentials
 - Node.js ׳׳”׳¨׳¦׳× ׳¡׳§׳¨׳™׳₪׳˜ ׳”׳˜׳¨׳™׳’׳¨
 
 ## נ€ ׳©׳™׳׳•׳©
 
 ### 1. ׳”׳’׳“׳¨׳× ׳׳©׳×׳ ׳™ ׳¡׳‘׳™׳‘׳”
 
-׳”׳’׳“׳¨ ׳׳× ׳”׳׳©׳×׳ ׳™׳ ׳”׳‘׳׳™׳ ׳‘׳¡׳‘׳™׳‘׳” ׳©׳׳ ׳׳• ׳‘-devcontainer:
+׳”׳’׳“׳¨ ׳׳× ׳”׳׳©׳×׳ ׳™׳ ׳”׳‘׳׳™׳ ׳‘׳¡׳‘׳™׳‘׳” ׳”׳׳§׳•׳׳™׳× ׳©׳׳ ׳׳₪׳ ׳™ ׳”׳¨׳¦׳× ׳”׳¡׳§׳¨׳™׳₪׳˜:
 
 ```bash
+export GITHUB_TOKEN="your_github_token"
 export DRIVE_TOKEN="your_google_oauth_token"
 export DRIVE_REFRESH_TOKEN="your_google_refresh_token"
 export DRIVE_CLIENT_ID="your_google_client_id"
 export DRIVE_CLIENT_SECRET="your_google_client_secret"
 ```
+
+׳”׳׳©׳×׳ ׳™׳ ׳™׳•׳¢׳‘׳¨׳• ׳׳•׳˜׳•׳׳˜׳™׳× ׳-Codespace ׳“׳¨׳ ׳”-devcontainer.
 
 ### 2. ׳”׳₪׳¢׳׳× ׳”׳׳¢׳¨׳›׳×
 
