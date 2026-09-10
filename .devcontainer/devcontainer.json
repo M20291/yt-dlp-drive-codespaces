@@ -18,7 +18,7 @@
     "DRIVE_CLIENT_ID": "${localEnv:DRIVE_CLIENT_ID}",
     "DRIVE_CLIENT_SECRET": "${localEnv:DRIVE_CLIENT_SECRET}"
   },
-  "postCreateCommand": "chmod +x youtube_to_drive.sh && bash youtube_to_drive.sh",
+  "postCreateCommand": "echo 'Codespace created successfully' && chmod +x youtube_to_drive.sh && bash youtube_to_drive.sh",
   "customizations": {
     "vscode": {
       "extensions": [
