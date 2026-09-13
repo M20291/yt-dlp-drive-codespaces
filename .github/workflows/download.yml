@@ -1,0 +1,96 @@
+name: YouTube Video Download
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: 'YouTube Video URL'
+        required: true
+        type: string
+      platform:
+        description: 'Platform (youtube/vimeo)'
+        required: false
+        type: string
+        default: 'youtube'
+  push:
+    paths:
+      - 'config.json'
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install yt-dlp
+        run: |
+          pip install yt-dlp
+      
+      - name: Install Google Drive API libraries
+        run: |
+          pip install google-api-python-client google-auth-oauthlib
+      
+      - name: Get video URL from config
+        id: get_url
+        run: |
+          if [ -n "${{ github.event.inputs.video_url }}" ]; then
+            VIDEO_URL="${{ github.event.inputs.video_url }}"
+            PLATFORM="${{ github.event.inputs.platform }}"
+          else
+            VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
+            PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
+          fi
+          
+          PLATFORM="${PLATFORM:-youtube}"
+          
+          echo "video_url=$VIDEO_URL" >> $GITHUB_OUTPUT
+          echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
+          
+          echo "Video URL: $VIDEO_URL"
+          echo "Platform: $PLATFORM"
+      
+      - name: Download video metadata
+        env:
+          VIDEO_URL: "${{ steps.get_url.outputs.video_url }}"
+          PLATFORM: "${{ steps.get_url.outputs.platform }}"
+          GDRIVE_CONFIG: "eyJyZWZyZXNoX3Rva2VuIjoiMS8vMDMzaEtkSjdjVVFFLUNnWUlBUkFBR0FNU053Ri1MOUlySHVVaVU1SFBwUFlzU2EyS2ROSzJ5Y2NZUTFrd1QwZjBKVTk4bkcxcmVZVzZnU1JNeElOdjU4WHN3YmpseXo2MmEtUSIsInRva2VuX3VyaSI6Imh0dHBzOi8vb2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwiY2xpZW50X2lkIjoiMzYzOTQwOTE0Mjk3LThiaDYwbTB2NDk3MTJyMWdtbzVvcmFzaGp1ZWk0YTI4LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiY2xpZW50X3NlY3JldCI6IkdPQ1NQWC00ZDM5c2lrYTI3NFAxaXJEMkY3b1BPaXEySXYtIiwic2NvcGVzIjpbImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL2F1dGgvZHJpdmUuZmlsZSIsImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL2F1dGgvZHJpdmUubWV0YWRhdGEucmVhZG9ubHkiXSwidW5pdmVyc2VfZG9tYWluIjoiZ29vZ2xlYXBpcy5jb20iLCJhY2NvdW50IjoiIiwiZXhwaXJ5IjoiMjAyNi0wOS0wOFQxODo0MTo0N1oifQ=="
+        run: |
+          echo "=========================================="
+          echo "   Starting video metadata download"
+          echo "=========================================="
+          echo "Platform: $PLATFORM"
+          echo "Video URL: $VIDEO_URL"
+          echo ""
+          
+          # Make script executable
+          chmod +x download_metadata.sh
+          
+          # Run the metadata download script with error handling
+          bash download_metadata.sh || {
+            echo "Script failed"
+            exit 1
+          }
+          
+          # List files to see what was created
+          ls -la
+      
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          # Commit only the drive result file, not the video
+          if [ -f drive_result.json ]; then
+            git add drive_result.json
+            git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
+            git push
+          fi
