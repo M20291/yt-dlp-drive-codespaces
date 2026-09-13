@@ -75,8 +75,8 @@ jobs:
           # Make script executable
           chmod +x download_metadata.sh
           
-          # Run the metadata download script with error handling
-          bash download_metadata.sh || {
+          # Run the metadata download script with error handling and capture output
+          bash download_metadata.sh 2>&1 | tee download_log.txt || {
             echo "Script failed"
             exit 1
           }
@@ -88,12 +88,15 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Commit only the drive result file and upload log, not the video
+          # Commit only the drive result file, upload log, and download log, not the video
           if [ -f drive_result.json ]; then
             git add drive_result.json
           fi
           if [ -f upload_log.txt ]; then
             git add upload_log.txt
+          fi
+          if [ -f download_log.txt ]; then
+            git add download_log.txt
           fi
           git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
           git push
