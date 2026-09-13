@@ -44,16 +44,16 @@ jobs:
             PLATFORM="${{ github.event.inputs.platform }}"
           else
             VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
-            PLATFORM=$(cat config.json | grep -o 'bplatform"[^,]*' | cut -d'"' -f4)
+            PLALFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
           fi
           
           PLATFORM="${PLATFORM:-youtube}"
           
           echo "video_url=$VIDEO_URL" >> $GITHUB_OUTPUT
-          echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
+          echo "platform=$PLALFORM" >> $GITHUB_OUTPUT
           
           echo "Video URL: $VIDEO_URL"
-          echo "Platform: $PLATFORM"
+          echo "Platform: $PLALFORM"
       
       - name: Download video metadata
         env:
@@ -63,7 +63,7 @@ jobs:
           echo "=========================================="
           echo "   Starting video metadata download"
           echo "=========================================="
-          echo "Platform: $PLATFORM"
+          echo "Platform: $PLALFORM"
           echo "Video URL: $VIDEO_URL"
           echo ""
           
@@ -71,7 +71,7 @@ jobs:
           chmod +x download_metadata.sh
           
           # Run the metadata download script with error handling
-          bash download_metadata.sh || {
+           bash download_metadata.sh ||{
             echo "ג Script failed"
             exit 1
           }
