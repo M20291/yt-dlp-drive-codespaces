@@ -1,7 +1,9 @@
 #!/bin/bash
 echo "Video URL: $VIDEO_URL"
 echo "Downloading video..."
-python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s"
+python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" 2>&1
+DOWNLOAD_EXIT_CODE=$?
+echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
 
 # Upload to Google Drive using rclone
@@ -25,3 +27,4 @@ if [ -n "$GDRIVE_CONFIG" ]; then
 else
   echo "No Google Drive config provided"
   echo "{\"video_url\":\"$VIDEO_URL\",\"error\":\"No Google Drive config\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":false}" > drive_result.json
+fi
