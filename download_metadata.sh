@@ -8,8 +8,17 @@ echo "Download complete"
 if [ -n "$GDRIVE_CONFIG" ]; then
   echo "Uploading to Google Drive..."
   echo "$GDRIVE_CONFIG" | base64 -d > rclone.conf
-  rclone copy video.* gdrive: --config rclone.conf
-  echo "Upload complete"
+  VIDEO_FILE=$(ls video.* 2>/dev/null | head -1)
+  if [ -n "$VIDEO_FILE" ]; then
+    rclone copy "$VIDEO_FILE" gdrive: --config rclone.conf
+    echo "Upload complete"
+    # Create result file with upload info
+    echo "{\"video_url\":\"$VIDEO_URL\",\"uploaded_file\":\"$VIDEO_FILE\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":true}" > drive_result.json
+  else
+    echo "No video file found to upload"
+    echo "{\"video_url\":\"$VIDEO_URL\",\"error\":\"No video file found\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":false}" > drive_result.json
+  fi
 else
   echo "No Google Drive config provided"
+  echo "{\"video_url\":\"$VIDEO_URL\",\"error\":\"No Google Drive config\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":false}" > drive_result.json
 fi
