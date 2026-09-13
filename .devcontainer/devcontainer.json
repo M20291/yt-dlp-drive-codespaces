@@ -1,5 +1,7 @@
 {
   "name": "Test Container",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "postAttachCommand": "echo 'Attached and running' > /workspace/test_attach.txt"
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "overrideCommand": false
 }
