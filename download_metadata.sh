@@ -22,6 +22,7 @@ import sys
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from google.auth.transport.requests import Request
 
 try:
     # Load credentials
@@ -33,8 +34,7 @@ try:
     print(f"Token URI: {creds_data.get('token_uri')}")
     print(f"Scopes: {creds_data.get('scopes')}")
     
-    # Create credentials object - we need to handle refresh token
-    from google.oauth2 import refresh_token
+    # Create credentials object with refresh token
     creds = Credentials(
         token=None,  # We'll refresh
         refresh_token=creds_data.get('refresh_token'),
@@ -46,9 +46,9 @@ try:
     
     print("Credentials object created")
     
-    # Refresh the token
+    # Refresh the token using the correct method
     print("Refreshing token...")
-    creds.refresh(refresh_token.Request())
+    creds.refresh(Request())
     print("Token refreshed successfully")
     
     # Create Drive API service
