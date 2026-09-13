@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Video URL: $VIDEO_URL"
 echo "Downloading video..."
-# Download video with simple format selection
-python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" 2>&1
+# Download video with verbose output
+python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" --verbose 2>&1
 DOWNLOAD_EXIT_CODE=$?
 echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
