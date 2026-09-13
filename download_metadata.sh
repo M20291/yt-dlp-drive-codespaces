@@ -14,8 +14,8 @@ ls -la
 if [ -n "$GDRIVE_CONFIG" ]; then
   echo "Uploading to Google Drive using API..."
   echo "$GDRIVE_CONFIG" | base64 -d > gdrive_config.json
-  # Find only video files with actual video extensions
-  VIDEO_FILE=$(find . -maxdepth 1 -type f \( -iname 'video.mp4' -o -iname 'video.webm' -o -iname 'video.mkv' -o -iname 'video.mov' -o -iname 'video.avi' \) -printf '%T@ %p\n' | sort -nr | cut -d' ' -f2- | head -1)
+  # Find only video files with actual video extensions using ls
+  VIDEO_FILE=$(ls -t video.mp4 video.webm video.mkv video.mov video.avi 2>/dev/null | head -1)
   if [ -n "$VIDEO_FILE" ]; then
     echo "Found video file: $VIDEO_FILE"
     # Upload file using Python script with logging to file
