@@ -1,1 +1,1 @@
-{"video_url":"https://www.youtube.com/watch?v=dQw4w9WgXcQ","uploaded_file":"video.f251.webm","timestamp":"2026-09-13T20:31:45Z","success":true}
+{"video_url":"https://www.youtube.com/watch?v=dQw4w9WgXcQ","error":"rclone upload failed with exit code 1","timestamp":"2026-09-13T20:49:53Z","success":false}
