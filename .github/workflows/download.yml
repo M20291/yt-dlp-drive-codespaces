@@ -1,0 +1,112 @@
+name: YouTube Video Downloader
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: 'YouTube Video URL'
+        required: true
+        type: string
+      platform:
+        description: 'Platform (youtube/vimeo)'
+        required: false
+        type: string
+        default: 'youtube'
+  push:
+    paths:
+      - 'config.json'
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install yt-dlp
+        run: |
+          pip install yt-dlp
+      
+      - name: Get video URL from input or config
+        id: get_url
+        run: |
+          if [ -n "${{ github.event.inputs.video_url }}" ]; then
+            VIDEO_URL="${{ github.event.inputs.video_url }}"
+            PLATFORM="${{ github.event.inputs.platform }}"
+          else
+            VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
+            PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
+          fi
+          
+          PLATFORM="${PLATFORM:-youtube}"
+          
+          echo "video_url=$VIDEO_URL" >> $GITHUB_OUTPUT
+          echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
+          
+          echo "Video URL: $VIDEO_URL"
+          echo "Platform: $PLATFORM"
+      
+      - name: Download video
+        run: |
+          VIDEO_URL="${{ steps.get_url.outputs.video_url }}"
+          PLATFORM="${{ steps.get_url.outputs.platform }}"
+          
+          echo "=========================================="
+          echo "   Starting video download"
+          echo "=========================================="
+          echo "Platform: $PLATFORM"
+          echo "Video URL: $VIDEO_URL"
+          echo ""
+          
+          # Create temp directory
+          TEMP_DIR=$(mktemp -d)
+          echo "Temp directory: $TEMP_DIR"
+          
+          # Download video
+          echo "Downloading video..."
+          python3 -m yt_dlp -f "best[ext=mp4]" -o "$TEMP_DIR/%(title)s.%(ext)s" "$VIDEO_URL"
+          
+          # Find downloaded files
+          DOWNLOADED_FILES=($(find "$TEMP_DIR" -type f -not -name ".*"))
+          
+          if [ ${#DOWNLOADED_FILES[@]} -eq 0 ]; then
+            echo "No files downloaded"
+            exit 1
+          fi
+          
+          echo "Downloaded ${#DOWNLOADED_FILES[@]} files"
+          
+          # Create results JSON
+          echo "Creating results file..."
+          echo '{"success": true, "platform": "'$PLATFORM'", "video_url": "'$VIDEO_URL'", "downloaded_files": [' > download_results.json
+          
+          for file in "${DOWNLOADED_FILES[@]}"; do
+            FILENAME=$(basename "$file")
+            FILESIZE=$(du -h "$file" | cut -f1)
+            echo "  {\"name\": \"$FILENAME\", \"size\": \"$FILESIZE\"}," >> download_results.json
+          done
+          
+          echo '], "timestamp": "'$(date -Iseconds)'", "note": "Downloaded via GitHub Action"}' >> download_results.json
+          
+          # Fix JSON formatting (remove trailing comma)
+          sed -i '$ s/,$//' download_results.json
+          
+          echo "Results saved to download_results.json"
+          cat download_results.json
+          
+          # Cleanup
+          rm -rf "$TEMP_DIR"
+      
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add download_results.json
+          git diff --staged --quiet || git commit -m "Update download results [skip ci]"
+          git push
