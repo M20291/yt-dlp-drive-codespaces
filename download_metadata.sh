@@ -15,9 +15,16 @@ if [ -n "$GDRIVE_CONFIG" ]; then
   if [ -n "$VIDEO_FILE" ]; then
     echo "Found video file: $VIDEO_FILE"
     rclone copy "$VIDEO_FILE" gdrive: --config rclone.conf
-    echo "Upload complete"
-    # Create result file with upload info
-    echo "{\"video_url\":\"$VIDEO_URL\",\"uploaded_file\":\"$VIDEO_FILE\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":true}" > drive_result.json
+    RCLONE_EXIT_CODE=$?
+    echo "rclone exit code: $RCLONE_EXIT_CODE"
+    if [ $RCLONE_EXIT_CODE -eq 0 ]; then
+      echo "Upload complete"
+      # Create result file with upload info
+      echo "{\"video_url\":\"$VIDEO_URL\",\"uploaded_file\":\"$VIDEO_FILE\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":true}" > drive_result.json
+    else
+      echo "Upload failed with exit code: $RCLONE_EXIT_CODE"
+      echo "{\"video_url\":\"$VIDEO_URL\",\"error\":\"rclone upload failed with exit code $RCLONE_EXIT_CODE\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"success\":false}" > drive_result.json
+    fi
   else
     echo "No video file found to upload"
     echo "Listing all files in directory:"
