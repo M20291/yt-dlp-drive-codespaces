@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Video URL: $VIDEO_URL"
 echo "Downloading video..."
-# Download video with specific format selection to ensure video is downloaded
-python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" --merge-output-format mp4 2>&1
+# Download video with simple format selection
+python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" 2>&1
 DOWNLOAD_EXIT_CODE=$?
 echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
