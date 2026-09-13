@@ -88,5 +88,9 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Note: We don't commit the video file as it's too large for GitHub
-          # Only commit if we have metadata or results
+          # Commit only the drive result file, not the video
+          if [ -f drive_result.json ]; then
+            git add drive_result.json
+            git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
+            git push
+          fi
