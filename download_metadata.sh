@@ -6,10 +6,15 @@ echo "=========================================="
 echo ""
 
 # ׳§׳¨׳™׳׳× ׳›׳×׳•׳‘׳× ׳¡׳¨׳˜׳•׳ ׳׳”-config
-VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
+if [ -n "$VIDEO_URL" ]; then
+    echo "נ″¥ Using video URLfrom environment variable
+else
+    echo "נ“¥ Reading video URLfrom config.json"
+    VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
+fi
 
 if [ -z "$VIDEO_URL" ]; then
-    echo "ג No video URL found in config.json"
+    echo "ג No video URLfound"
     exit 1
 fi
 
@@ -51,4 +56,4 @@ cat metadata_result.json
 echo ""
 echo "=========================================="
 echo "   Metadata download completed!"
-echo "=========================================="
+echo "========================================="
