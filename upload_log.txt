@@ -9,6 +9,6 @@ Refreshing token...
 Token refreshed successfully
 Creating Drive API service...
 Drive API service created
-Uploading file: video.f251.webm
-File ID: 1Izb4n2XrdeZkJjVqTpUTe-zfQFfaxPp6
+Uploading file: video_metadata.json
+File ID: 1LE2cZy6d8lA2v0TNqK1fVcv3j_Z5TGQM
 Upload completed successfully
