@@ -1,4 +1,4 @@
-name: YouTube Video Downloader
+name: YouTube Video Download
 
 permissions:
   contents: write
@@ -44,16 +44,16 @@ jobs:
             PLATFORM="${{ github.event.inputs.platform }}"
           else
             VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
-            PLALFORM=$(cat config.json | grep -o 'nplatform"[^,]*' | cut -d'"' -f4)
+            PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
           fi
           
           PLATFORM="${PLATFORM:-youtube}"
           
           echo "video_url=$VIDEO_URL" >> $GITHUB_OUTPUT
-          echo "platform=$PLALFORM" >> $GITHUB_OUTPUT
+          echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
           
           echo "Video URL: $VIDEO_URL"
-          echo "Platform: $PLALFORM"
+          echo "Platform: $PLATFORM"
       
       - name: Download video metadata
         env:
@@ -63,7 +63,7 @@ jobs:
           echo "=========================================="
           echo "   Starting video metadata download"
           echo "=========================================="
-          echo "Platform: $PLALFORM"
+          echo "Platform: $PLATFORM"
           echo "Video URL: $VIDEO_URL"
           echo ""
           
@@ -71,9 +71,9 @@ jobs:
           chmod +x download_metadata.sh
           
           # Run the metadata download script with error handling
-           bash download_metadata.sh || {
-              echo "Script failed"
-              exit 1
+          bash download_metadata.sh || {
+            echo "Script failed"
+            exit 1
           }
           
           # List files to see what was created
@@ -88,3 +88,4 @@ jobs:
             git diff --staged --quiet || git commit -m "Update video metadata [skip ci]"
             git push
           fi
+          # Note: We don't commit the video file as it's too large for GitHub
