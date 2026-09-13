@@ -1,5 +1,5 @@
 {
   "name": "Test Container",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "postCreateCommand": "echo 'Test output' > /workspace/test_minimal.txt"
+  "postAttachCommand": "echo 'Attached and running' > /workspace/test_attach.txt"
 }
