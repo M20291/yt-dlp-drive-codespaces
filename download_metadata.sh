@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Video URL: $VIDEO_URL"
-echo "Downloading metadata only..."
-# Download metadata only first to test
-python3 -m yt_dlp "$VIDEO_URL" --write-info --skip-download 2>&1
+echo "Downloading video..."
+# Download video with simple format selection
+python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" 2>&1
 DOWNLOAD_EXIT_CODE=$?
 echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
