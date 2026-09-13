@@ -70,8 +70,11 @@ jobs:
           # Make script executable
           chmod +x download_metadata.sh
           
-          # Run the metadata download script
-          bash download_metadata.sh
+          # Run the metadata download script with error handling
+          bash download_metadata.sh || {
+            echo "ג Script failed"
+            exit 1
+          }
       
       - name: Commit results
         run: |
