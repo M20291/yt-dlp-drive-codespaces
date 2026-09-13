@@ -1,5 +1,5 @@
 {
-  "name": "YouTube Downloader",
-  "image": "mcr.microsoft.com/devcontainers/python:3",
-  "postCreateCommand": "pip install yt-dlp && chmod +x /workspace/download_metadata.sh && bash /workspace/download_metadata.sh"
+  "name": "Test Container",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "postCreateCommand": ["echo", "Test output"]
 }
