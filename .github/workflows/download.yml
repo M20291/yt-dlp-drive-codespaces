@@ -44,7 +44,7 @@ jobs:
             PLATFORM="${{ github.event.inputs.platform }}"
           else
             VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
-            PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
+            PLATFORM=$(cat config.json | grep -o 'bplatform"[^,]*' | cut -d'"' -f4)
           fi
           
           PLATFORM="${PLATFORM:-youtube}"
@@ -56,10 +56,10 @@ jobs:
           echo "Platform: $PLATFORM"
       
       - name: Download video metadata
+        env:
+          VIDEO_URL: "${{ steps.get_url.outputs.video_url }}"
+          PLATFORM: "${{ steps.get_url.outputs.platform }}"
         run: |
-          VIDEO_URL="${{ steps.get_url.outputs.video_url }}"
-          PLATFORM="${{ steps.get_url.outputs.platform }}"
-          
           echo "=========================================="
           echo "   Starting video metadata download"
           echo "=========================================="
@@ -67,40 +67,16 @@ jobs:
           echo "Video URL: $VIDEO_URL"
           echo ""
           
-          # Get video metadata only (no download)
-          echo "Getting video metadata..."
-          python3 -m yt_dlp --dump-json "$VIDEO_URL" > video_metadata.json
+          # Make script executable
+          chmod +x download_metadata.sh
           
-          # Extract basic info
-          TITLE=$(python3 -c "import json; data=json.load(open('video_metadata.json')); print(data.get('title', 'Unknown'))")
-          DURATION=$(python3 -c "import json; data=json.load(open('video_metadata.json')); print(data.get('duration', 'Unknown'))")
-          VIEW_COUNT=$(python3 -c "import json; data=json.load(open('video_metadata.json')); print(data.get('view_count', 'Unknown'))")
-          
-          echo "Title: $TITLE"
-          echo "Duration: $DURATION seconds"
-          echo "View count: $VIEW_COUNT"
-          
-          # Create results JSON
-          cat > download_results.json << EOF
-{
-  "success": true,
-  "platform": "$PLATFORM",
-  "video_url": "$VIDEO_URL",
-  "video_title": "$TITLE",
-  "duration": $DURATION,
-  "view_count": $VIEW_COUNT,
-  "timestamp": "$(date -Iseconds)",
-  "note": "Metadata only - no actual download (GitHub Actions size limit)"
-}
-EOF
-          
-          echo "Results saved to download_results.json"
-          cat download_results.json
+          # Run the metadata download script
+          bash download_metadata.sh
       
       - name: Commit results
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add download_results.json
-          git diff --staged --quiet || git commit -m "Update download results [skip ci]"
+          git add metadata_result.json
+          git diff --staged --quiet || git commit -m "Update metadata results [skip ci]"
           git push
