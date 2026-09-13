@@ -33,10 +33,29 @@ jobs:
         run: |
           pip install yt-dlp
       
+      - name: Get video URL from config
+        id: get_url
+        run: |
+          if [ -n "${{ github.event.inputs.video_url }}" ]; then
+            VIDEO_URL="${{ github.event.inputs.video_url }}"
+            PLATFORM="${{ github.event.inputs.platform }}"
+          else
+            VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
+            PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
+          fi
+          
+          PLATFORM="${PLATFORM:-youtube}"
+          
+          echo "video_url=$VIDEO_URL" >> $GITHUB_OUTPUT
+          echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
+          
+          echo "Video URL: $VIDEO_URL"
+          echo "Platform: $PLATFORM"
+      
       - name: Download video
         run: |
-          VIDEO_URL="${{ github.event.inputs.video_url }}"
-          PLATFORM="${{ github.event.inputs.platform }}"
+          VIDEO_URL="${{ steps.get_url.outputs.video_url }}"
+          PLATFORM="${{ steps.get_url.outputs.platform }}"
           
           echo "=========================================="
           echo "   Starting video download"
