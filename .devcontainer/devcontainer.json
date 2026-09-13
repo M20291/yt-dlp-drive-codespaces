@@ -1,6 +1,5 @@
 {
   "name": "YouTube Downloader",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "remoteUser": "root",
-  "postCreateCommand": "bash -c 'echo \"Test: Container is working\" > /workspace/container_test.txt && apt-get update && apt-get install -y python3 python3-pip && pip3 install yt-dlp && chmod +x /workspace/download_metadata.sh && bash /workspace/download_metadata.sh'"
+  "image": "mcr.microsoft.com/devcontainers/python:3",
+  "postCreateCommand": "pip install yt-dlp && chmod +x /workspace/download_metadata.sh && bash /workspace/download_metadata.sh"
 }
