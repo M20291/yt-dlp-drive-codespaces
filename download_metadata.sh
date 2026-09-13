@@ -2,10 +2,13 @@
 echo "Video URL: $VIDEO_URL"
 echo "Downloading video..."
 # Download video with specific format selection to ensure video is downloaded
-python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" -f "bestvideo+bestaudio/best" --merge-output-format mp4 2>&1
+python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" --merge-output-format mp4 2>&1
 DOWNLOAD_EXIT_CODE=$?
 echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
+# List all files to see what was created
+echo "Files created:"
+ls -la
 
 # Upload to Google Drive using Google Drive API
 if [ -n "$GDRIVE_CONFIG" ]; then
