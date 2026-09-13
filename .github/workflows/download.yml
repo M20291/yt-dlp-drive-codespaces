@@ -44,7 +44,7 @@ jobs:
             PLATFORM="${{ github.event.inputs.platform }}"
           else
             VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
-            PLALFORM=$(cat config.json | grep -o 'bplatform"[^,]*' | cut -d'"' -f4)
+            PLALFORM=$(cat config.json | grep -o 'nplatform"[^,]*' | cut -d'"' -f4)
           fi
           
           PLATFORM="${PLATFORM:-youtube}"
@@ -63,7 +63,7 @@ jobs:
           echo "=========================================="
           echo "   Starting video metadata download"
           echo "=========================================="
-          echo "Platform: $PLALFORM"
+          echo "Platform: $PLATFORM"
           echo "Video URL: $VIDEO_URL"
           echo ""
           
@@ -75,11 +75,6 @@ jobs:
               echo "Script failed"
               exit 1
           }
-      
-      - name: Commit results
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add metadata_result.json
-          git diff --staged --quiet || git commit -m "Update metadata results [skip ci]"
-          git push
+          
+          # List files to see what was created
+          ls -la
