@@ -1,5 +1,5 @@
 {
   "name": "YouTube Downloader",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "postCreateCommand": "apt-get update && apt-get install -y python3 python3-pip && pip3 install yt-dlp"
+  "postCreateCommand": "apt-get update && apt-get install -y python3 python3-pip && pip3 install yt-dlp && chmod +x test_yt_dlp.sh && bash test_yt_dlp.sh"
 }
