@@ -1,10 +1,14 @@
 /opt/hostedtoolcache/Python/3.10.21/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.10.21) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
   warnings.warn(message, FutureWarning)
-Traceback (most recent call last):
-  File "<stdin>", line 19, in <module>
-ImportError: cannot import name 'refresh_token' from 'google.oauth2' (/opt/hostedtoolcache/Python/3.10.21/x64/lib/python3.10/site-packages/google/oauth2/__init__.py)
 Credentials loaded successfully
 Client ID: 363940914297-8bh60m0v49712r1gmo5orashjuei4a28.apps.googleusercontent.com
 Token URI: https://oauth2.googleapis.com/token
 Scopes: ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.metadata.readonly']
-Error during upload: cannot import name 'refresh_token' from 'google.oauth2' (/opt/hostedtoolcache/Python/3.10.21/x64/lib/python3.10/site-packages/google/oauth2/__init__.py)
+Credentials object created
+Refreshing token...
+Token refreshed successfully
+Creating Drive API service...
+Drive API service created
+Uploading file: video.f251.webm
+File ID: 1Izb4n2XrdeZkJjVqTpUTe-zfQFfaxPp6
+Upload completed successfully
