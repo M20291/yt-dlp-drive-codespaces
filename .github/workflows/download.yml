@@ -15,6 +15,10 @@ on:
         required: false
         type: string
         default: 'youtube'
+      cookies:
+        description: 'YouTube cookies (optional, for videos requiring authentication)'
+        required: false
+        type: string
   push:
     paths:
       - 'config.json'
@@ -63,6 +67,7 @@ jobs:
         env:
           VIDEO_URL: "${{ steps.get_url.outputs.video_url }}"
           PLATFORM: "${{ steps.get_url.outputs.platform }}"
+          COOKIES: "${{ github.event.inputs.cookies }}"
           GDRIVE_CONFIG: "eyJyZWZyZXNoX3Rva2VuIjoiMS8vMDMzaEtkSjdjVVFFLUNnWUlBUkFBR0FNU053Ri1MOUlySHVVaVU1SFBwUFlzU2EyS2ROSzJ5Y2NZUTFrd1QwZjBKVTk4bkcxcmVZVzZnU1JNeElOdjU4WHN3YmpseXo2MmEtUSIsInRva2VuX3VyaSI6Imh0dHBzOi8vb2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwiY2xpZW50X2lkIjoiMzYzOTQwOTE0Mjk3LThiaDYwbTB2NDk3MTJyMWdtbzVvcmFzaGp1ZWk0YTI4LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiY2xpZW50X3NlY3JldCI6IkdPQ1NQWC00ZDM5c2lrYTI3NFAxaXJEMkY3b1BPaXEySXYtIiwic2NvcGVzIjpbImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL2F1dGgvZHJpdmUuZmlsZSIsImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL2F1dGgvZHJpdmUubWV0YWRhdGEucmVhZG9ubHkiXSwidW5pdmVyc2VfZG9tYWluIjoiZ29vZ2xlYXBpcy5jb20iLCJhY2NvdW50IjoiIiwiZXhwaXJ5IjoiMjAyNi0wOS0wOFQxODo0MTo0N1oifQ=="
         run: |
           echo "=========================================="
@@ -70,6 +75,7 @@ jobs:
           echo "=========================================="
           echo "Platform: $PLATFORM"
           echo "Video URL: $VIDEO_URL"
+          echo "Cookies provided: $([ -n \"$COOKIES\" ] && echo 'Yes' || echo 'No')"
           echo ""
           
           # Make script executable
