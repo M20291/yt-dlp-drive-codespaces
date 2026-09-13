@@ -18,36 +18,57 @@ if [ -n "$GDRIVE_CONFIG" ]; then
     python3 << EOF
 import json
 import os
+import sys
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# Load credentials
-with open('gdrive_config.json', 'r') as f:
-    creds_data = json.load(f)
-
-# Create credentials object - we need to handle refresh token
-from google.oauth2 import refresh_token
-creds = Credentials(
-    token=None,  # We'll refresh
-    refresh_token=creds_data.get('refresh_token'),
-    token_uri=creds_data.get('token_uri'),
-    client_id=creds_data.get('client_id'),
-    client_secret=creds_data.get('client_secret'),
-    scopes=creds_data.get('scopes')
-)
-
-# Refresh the token
-creds.refresh(refresh_token.Request())
-
-# Create Drive API service
-service = build('drive', 'v3', credentials=creds)
-
-# Upload file
-file_metadata = {'name': '$VIDEO_FILE'}
-media = MediaFileUpload('$VIDEO_FILE', resumable=True)
-file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-print(f"File ID: {file.get('id')}")
+try:
+    # Load credentials
+    with open('gdrive_config.json', 'r') as f:
+        creds_data = json.load(f)
+    
+    print("Credentials loaded successfully")
+    print(f"Client ID: {creds_data.get('client_id')}")
+    print(f"Token URI: {creds_data.get('token_uri')}")
+    print(f"Scopes: {creds_data.get('scopes')}")
+    
+    # Create credentials object - we need to handle refresh token
+    from google.oauth2 import refresh_token
+    creds = Credentials(
+        token=None,  # We'll refresh
+        refresh_token=creds_data.get('refresh_token'),
+        token_uri=creds_data.get('token_uri'),
+        client_id=creds_data.get('client_id'),
+        client_secret=creds_data.get('client_secret'),
+        scopes=creds_data.get('scopes')
+    )
+    
+    print("Credentials object created")
+    
+    # Refresh the token
+    print("Refreshing token...")
+    creds.refresh(refresh_token.Request())
+    print("Token refreshed successfully")
+    
+    # Create Drive API service
+    print("Creating Drive API service...")
+    service = build('drive', 'v3', credentials=creds)
+    print("Drive API service created")
+    
+    # Upload file
+    print(f"Uploading file: $VIDEO_FILE")
+    file_metadata = {'name': '$VIDEO_FILE'}
+    media = MediaFileUpload('$VIDEO_FILE', resumable=True)
+    file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+    print(f"File ID: {file.get('id')}")
+    print("Upload completed successfully")
+    
+except Exception as e:
+    print(f"Error during upload: {str(e)}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)
 EOF
     GDRIVE_EXIT_CODE=$?
     echo "gdrive upload exit code: $GDRIVE_EXIT_CODE"
