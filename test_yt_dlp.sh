@@ -21,6 +21,18 @@ else
     exit 1
 fi
 
+# ׳™׳¦׳™׳¨׳× ׳§׳•׳‘׳¥ ׳×׳•׳¦׳׳”
+echo "Creating result file..."
+cat > test_result.txt << EOF
+Test completed successfully!
+Timestamp: $(date -Iseconds)
+Python: $(python3 --version)
+yt-dlp: $(python3 -m yt_dlp --version)
+EOF
+
+echo "ג… Result file created: test_result.txt"
+cat test_result.txt
+
 echo ""
 echo "=========================================="
 echo "   All checks passed!"
