@@ -44,7 +44,7 @@ jobs:
             PLATFORM="${{ github.event.inputs.platform }}"
           else
             VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
-            PLALFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
+            PLALFORM=$(cat config.json | grep -o 'bplatform"[^,]*' | cut -d'"' -f4)
           fi
           
           PLATFORM="${PLATFORM:-youtube}"
@@ -71,9 +71,9 @@ jobs:
           chmod +x download_metadata.sh
           
           # Run the metadata download script with error handling
-           bash download_metadata.sh ||{
-            echo "ג Script failed"
-            exit 1
+           bash download_metadata.sh || {
+              echo "Script failed"
+              exit 1
           }
       
       - name: Commit results
