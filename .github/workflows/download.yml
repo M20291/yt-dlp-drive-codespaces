@@ -55,65 +55,47 @@ jobs:
           echo "Video URL: $VIDEO_URL"
           echo "Platform: $PLATFORM"
       
-      - name: Download video
+      - name: Download video metadata
         run: |
           VIDEO_URL="${{ steps.get_url.outputs.video_url }}"
           PLATFORM="${{ steps.get_url.outputs.platform }}"
           
           echo "=========================================="
-          echo "   Starting video download"
+          echo "   Starting video metadata download"
           echo "=========================================="
           echo "Platform: $PLATFORM"
           echo "Video URL: $VIDEO_URL"
           echo ""
           
-          # Create temp directory
-          TEMP_DIR=$(mktemp -d)
-          echo "Temp directory: $TEMP_DIR"
+          # Get video metadata only (no download)
+          echo "Getting video metadata..."
+          python3 -m yt_dlp --dump-json "$VIDEO_URL" > video_metadata.json
           
-          # Download video
-          echo "Downloading video..."
-          python3 -m yt_dlp -f "best[ext=mp4]" -o "$TEMP_DIR/%(title)s.%(ext)s" "$VIDEO_URL"
+          # Extract basic info
+          TITLE=$(python3 -c "import json; data=json.load(open('video_metadata.json')); print(data.get('title', 'Unknown'))")
+          DURATION=$(python3 -c "import json; data=json.load(open('video_metadata.json')); print(data.get('duration', 'Unknown'))")
+          VIEW_COUNT=$(python3 -c "import json; data=json.load(open('video_metadata.json')); print(data.get('view_count', 'Unknown'))")
           
-          # Find downloaded files
-          DOWNLOADED_FILES=($(find "$TEMP_DIR" -type f -not -name ".*"))
-          
-          if [ ${#DOWNLOADED_FILES[@]} -eq 0 ]; then
-            echo "No files downloaded"
-            exit 1
-          fi
-          
-          echo "Downloaded ${#DOWNLOADED_FILES[@]} files"
+          echo "Title: $TITLE"
+          echo "Duration: $DURATION seconds"
+          echo "View count: $VIEW_COUNT"
           
           # Create results JSON
-          echo "Creating results file..."
           cat > download_results.json << EOF
 {
   "success": true,
   "platform": "$PLATFORM",
   "video_url": "$VIDEO_URL",
-  "downloaded_files": [
+  "video_title": "$TITLE",
+  "duration": $DURATION,
+  "view_count": $VIEW_COUNT,
+  "timestamp": "$(date -Iseconds)",
+  "note": "Metadata only - no actual download (GitHub Actions size limit)"
+}
 EOF
-          
-          for file in "${DOWNLOADED_FILES[@]}"; do
-            FILENAME=$(basename "$file")
-            FILESIZE=$(du -h "$file" | cut -f1)
-            echo "    {\"name\": \"$FILENAME\", \"size\": \"$FILESIZE\"}," >> download_results.json
-          done
-          
-          echo "  ]," >> download_results.json
-          echo "  \"timestamp\": \"$(date -Iseconds)\"," >> download_results.json
-          echo "  \"note\": \"Downloaded via GitHub Action\"" >> download_results.json
-          echo "}" >> download_results.json
-          
-          # Fix JSON formatting (remove trailing comma)
-          sed -i '$ s/,$//' download_results.json
           
           echo "Results saved to download_results.json"
           cat download_results.json
-          
-          # Cleanup
-          rm -rf "$TEMP_DIR"
       
       - name: Commit results
         run: |
