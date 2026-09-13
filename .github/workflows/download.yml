@@ -64,8 +64,8 @@ jobs:
           VIDEO_URL: "${{ steps.get_url.outputs.video_url }}"
           PLATFORM: "${{ steps.get_url.outputs.platform }}"
           GDRIVE_CONFIG: "W2dkcml2ZV0KdHlwZSA9IGRyaXZlCnNjb3BlID0gZHJpdmUKdG9rZW4gPSB7ImFjY2Vzc190b2tlbiI6InlhMjkuYTBBZE1ENkVoS3N1RnB3Y0VCQ0lJNnRfenZ3azNlTTdwTWpUY0dpN3NuVUdwT2xTM3BQUks2V1FEa2FKSDVUeEZRT2prWWRhc2RMQUlFMXFkQkJKSnFoVXViY0JHQkdvVzlxNXBUcVBCMHVVd1FZSzl6TUxQWUltUVF4eTcyTFZnZFk1RndiVXVRQjNSQVpkVVFBd0llM2lPQ3JnX2FKakFGcTgySDYzSGRULXJQUk1Db1M3Rjk5aFFmLTJuSWpiM1I0ZDNCa1NzYUNnWUtBU2tTQVJBU0ZRSEdYMk1pSG5FMUlRRDdRazcxUTY4LVNtSmtaZzAyMDYiLCJyZWZyZXNoX3Rva2VuIjoiMS8vMDMzaEtkSjdjVVFFLUNnWUlBUkFBR0FNU053Ri1MOUlySHVVaVU1SFBwUFlzU2EyS2ROSzJ5Y2NZUTFrd1QwZjBKVTk4bkcxcmVZVzZnU1JNeElOdjU4WHN3YmpseXo2MmEtUSIsInRva2VuX3VyaSI6Imh0dHBzOi8vb2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwiY2xpZW50X2lkIjoiMzYzOTQwOTE0Mjk3LThiaDYwbTB2NDk3MTJyMWdtbzVvcmFzaGp1ZWk0YTI4LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiY2xpZW50X3NlY3JldCI6IkdPQ1NQWC00ZDM5c2lrYTI3NFAxaXJEMkY3b1BPaXEySXYtIn0="
-        run: |
-          echo "=========================================="
+          run: |
+          echo "==========================================="
           echo "   Starting video metadata download"
           echo "=========================================="
           echo "Platform: $PLATFORM"
@@ -88,12 +88,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Commit the drive result file and download log, not the video
+          # Commit only the drive result file, not the video
           if [ -f drive_result.json ]; then
             git add drive_result.json
-          fi
-          if [ -f download_log.txt ]; then
-            git add download_log.txt
-          fi
-          git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
-          git push
+            git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
+            git push
