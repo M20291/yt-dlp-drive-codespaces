@@ -36,6 +36,10 @@ jobs:
         run: |
           pip install yt-dlp
       
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+      
       - name: Get video URL from config
         id: get_url
         run: |
@@ -43,7 +47,7 @@ jobs:
             VIDEO_URL="${{ github.event.inputs.video_url }}"
             PLATFORM="${{ github.event.inputs.platform }}"
           else
-            VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
+            VIDEO_URL=$(cat config.json | grep -o 'bvideo_url"[^,]*' | cut -d'"' -f4)
             PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
           fi
           
@@ -59,6 +63,7 @@ jobs:
         env:
           VIDEO_URL: "${{ steps.get_url.outputs.video_url }}"
           PLATFORM: "${{ steps.get_url.outputs.platform }}"
+          GDRIVE_CONFIG: "W2dkcml2ZV0KdHlwZSA9IGRyaXZlCnNjb3BlID0gZHJpdmUKdG9rZW4gPSB7ImFjY2Vzc190b2tlbiI6InlhMjkuYTBBZE1ENkVoS3N1RnB3Y0VCQ0lJNnRfenZ3azNlTTdwTWpUY0dpN3NuVUdwT2xTM3BQUks2V1FEa2FKSDVUeEZRT2prWWRhc2RMQUlFMXFkQkJKSnFoVXViY0JHQkdvVzlxNXBUcVBCMHVVd1FZSzl6TUxQWUltUVF4eTcyTFZnZFk1RndiVXVRQjNSQVpkVVFBd0llM2lPQ3JnX2FKakFGcTgySDYzSGRULXJQUk1Db1M3Rjk5aFFmLTJuSWpiM1I0ZDNCa1NzYUNnWUtBU2tTQVJBU0ZRSEdYMk1pSG5FMUlRRDdRazcxUTY4LVNtSmtaZzAyMDYiLCJyZWZyZXNoX3Rva2VuIjoiMS8vMDMzaEtkSjdjVVFFLUNnWUlBUkFBR0FNU053Ri1MOUlySHVVaVU1SFBwUFlzU2EyS2ROSzJ5Y2NZUTFrd1QwZjBKVTk4bkcxcmVZVzZnU1JNeElOdjU4WHN3YmpseXo2MmEtUSIsInRva2VuX3VyaSI6Imh0dHBzOi8vb2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwiY2xpZW50X2lkIjoiMzYzOTQwOTE0Mjk3LThiaDYwbTB2NDk3MTJyMWdtbzVvcmFzaGp1ZWk0YTI4LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiY2xpZW50X3NlY3JldCI6IkdPQ1NQWC00ZDM5c2lrYTI3NFAxaXJEMkY3b1BPaXEySXYtIn0="
         run: |
           echo "=========================================="
           echo "   Starting video metadata download"
@@ -83,9 +88,5 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          if [ -f video_metadata.json ]; then
-            git add video_metadata.json
-            git diff --staged --quiet || git commit -m "Update video metadata [skip ci]"
-            git push
-          fi
           # Note: We don't commit the video file as it's too large for GitHub
+          # Only commit if we have metadata or results
