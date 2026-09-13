@@ -12,9 +12,6 @@ on:
         required: false
         type: string
         default: 'youtube'
-  push:
-    paths:
-      - 'config.json'
 
 jobs:
   download:
@@ -33,29 +30,10 @@ jobs:
         run: |
           pip install yt-dlp
       
-      - name: Get video URL from input or config
-        id: get_url
-        run: |
-          if [ -n "${{ github.event.inputs.video_url }}" ]; then
-            VIDEO_URL="${{ github.event.inputs.video_url }}"
-            PLATFORM="${{ github.event.inputs.platform }}"
-          else
-            VIDEO_URL=$(cat config.json | grep -o '"video_url"[^,]*' | cut -d'"' -f4)
-            PLATFORM=$(cat config.json | grep -o '"platform"[^,]*' | cut -d'"' -f4)
-          fi
-          
-          PLATFORM="${PLATFORM:-youtube}"
-          
-          echo "video_url=$VIDEO_URL" >> $GITHUB_OUTPUT
-          echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
-          
-          echo "Video URL: $VIDEO_URL"
-          echo "Platform: $PLATFORM"
-      
       - name: Download video
         run: |
-          VIDEO_URL="${{ steps.get_url.outputs.video_url }}"
-          PLATFORM="${{ steps.get_url.outputs.platform }}"
+          VIDEO_URL="${{ github.event.inputs.video_url }}"
+          PLATFORM="${{ github.event.inputs.platform }}"
           
           echo "=========================================="
           echo "   Starting video download"
@@ -84,15 +62,24 @@ jobs:
           
           # Create results JSON
           echo "Creating results file..."
-          echo '{"success": true, "platform": "'$PLATFORM'", "video_url": "'$VIDEO_URL'", "downloaded_files": [' > download_results.json
+          cat > download_results.json << EOF
+{
+  "success": true,
+  "platform": "$PLATFORM",
+  "video_url": "$VIDEO_URL",
+  "downloaded_files": [
+EOF
           
           for file in "${DOWNLOADED_FILES[@]}"; do
             FILENAME=$(basename "$file")
             FILESIZE=$(du -h "$file" | cut -f1)
-            echo "  {\"name\": \"$FILENAME\", \"size\": \"$FILESIZE\"}," >> download_results.json
+            echo "    {\"name\": \"$FILENAME\", \"size\": \"$FILESIZE\"}," >> download_results.json
           done
           
-          echo '], "timestamp": "'$(date -Iseconds)'", "note": "Downloaded via GitHub Action"}' >> download_results.json
+          echo "  ]," >> download_results.json
+          echo "  \"timestamp\": \"$(date -Iseconds)\"," >> download_results.json
+          echo "  \"note\": \"Downloaded via GitHub Action\"" >> download_results.json
+          echo "}" >> download_results.json
           
           # Fix JSON formatting (remove trailing comma)
           sed -i '$ s/,$//' download_results.json
