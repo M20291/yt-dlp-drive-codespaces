@@ -1,5 +1,4 @@
 {
-    "platform":  "youtube",
-    "video_url":  "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "cookies":  ""
+  "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "platform": "youtube"
 }
