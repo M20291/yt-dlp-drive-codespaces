@@ -63,7 +63,7 @@ jobs:
           echo "=========================================="
           echo "   Starting video metadata download"
           echo "=========================================="
-          echo "Platform: $PLATFORM"
+          echo "Platform: $PLALFORM"
           echo "Video URL: $VIDEO_URL"
           echo ""
           
@@ -78,3 +78,13 @@ jobs:
           
           # List files to see what was created
           ls -la
+      
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if [ -f video_metadata.json ]; then
+            git add video_metadata.json
+            git diff --staged --quiet || git commit -m "Update video metadata [skip ci]"
+            git push
+          fi
