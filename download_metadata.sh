@@ -7,7 +7,7 @@ echo "Download complete"
 # Upload to Google Drive using rclone
 if [ -n "$GDRIVE_CONFIG" ]; then
   echo "Uploading to Google Drive..."
-  echo "$GDRIVE_CONFIG" > rclone.conf
+  echo "$GDRIVE_CONFIG" | base64 -d > rclone.conf
   rclone copy video.* gdrive: --config rclone.conf
   echo "Upload complete"
 else
