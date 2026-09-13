@@ -88,9 +88,12 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Commit only the drive result file, not the video
+          # Commit only the drive result file and upload log, not the video
           if [ -f drive_result.json ]; then
             git add drive_result.json
-            git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
-            git push
           fi
+          if [ -f upload_log.txt ]; then
+            git add upload_log.txt
+          fi
+          git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
+          git push
