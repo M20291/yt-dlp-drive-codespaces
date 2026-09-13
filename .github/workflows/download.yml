@@ -12,6 +12,9 @@ on:
         required: false
         type: string
         default: 'youtube'
+  push:
+    paths:
+      - 'config.json'
 
 jobs:
   download:
