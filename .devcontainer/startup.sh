@@ -3,9 +3,9 @@
 # ׳¡׳§׳¨׳™׳₪׳˜ ׳”׳¨׳¦׳” ׳׳•׳˜׳•׳׳˜׳™׳× ׳©׳¨׳¥ ׳›׳ ׳₪׳¢׳ ׳©׳”-codespace ׳׳×׳—׳™׳
 # ׳™׳•׳¦׳¨ ׳§׳•׳‘׳¥ lock ׳›׳“׳™ ׳׳׳ ׳•׳¢ ׳”׳¨׳¦׳” ׳›׳₪׳•׳׳”
 
-LOCK_FI1="/tmp/metadata_script.lock"
+LOCK_FILE="/tmp/metadata_script.lock"
 
-if [ -f "$LOCK_FLES" ]; then
+if [ -f "$LOCK_FILE" ]; then
     echo "Script already running or completed"
     exit 0
 fi
@@ -17,7 +17,8 @@ echo "   Auto-run metadata download"
 echo "=========================================="
 echo ""
 
-sleep 10  # ׳”׳׳×׳ ׳” ׳׳’׳™׳©׳” ׳׳”׳×׳§׳ ׳” ׳׳”׳¡׳×׳™׳™׳
+# ׳”׳׳×׳ ׳” ׳׳”׳×׳§׳ ׳” ׳׳”׳¡׳×׳™׳™׳
+sleep 15
 
 if [ -f "download_metadata.sh" ] && [ -f "config.json" ]; then
     echo "Running metadata download script..."
