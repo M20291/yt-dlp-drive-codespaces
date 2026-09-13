@@ -93,3 +93,4 @@ jobs:
             git add drive_result.json
             git diff --staged --quiet || git commit -m "Update drive upload result [skip ci]"
             git push
+          fi
