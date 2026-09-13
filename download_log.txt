@@ -1,66 +1,75 @@
-Video URL: https://www.youtube.com/watch?v=_fqZTZiI1sM
+Video URL: https://youtu.be/_fqZTZiI1sM?si=0f0BnD5gub1z8x7p
+Platform: youtube
 Checking yt-dlp installation...
 2026.08.19
-Testing yt-dlp with a simple URL...
+Checking Deno installation...
+deno 2.9.6 (stable, release, x86_64-unknown-linux-gnu)
+v8 15.0.245.2-rusty
+typescript 6.0.3
+Cookies provided, saving to www.youtube.com_cookies.txt
+Using YouTube-specific parameters with Deno and remote components
+Starting download with parameters: --cookies "www.youtube.com_cookies.txt" --js-runtimes deno --remote-components ejs:github -f "best[ext=mp4]"
 Deprecated Feature: Support for Python version 3.10 has been deprecated. Please update to Python 3.11 or above
-WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
-WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
-ERROR: [youtube] _fqZTZiI1sM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
-Info dump exit code: 1
-Attempting to download video...
-Deprecated Feature: Support for Python version 3.10 has been deprecated. Please update to Python 3.11 or above
-[youtube] Extracting URL: https://www.youtube.com/watch?v=_fqZTZiI1sM
+[youtube] Extracting URL: https://youtu.be/_fqZTZiI1sM?si=0f0BnD5gub1z8x7p
 [youtube] _fqZTZiI1sM: Downloading webpage
-WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
+WARNING: [youtube] _fqZTZiI1sM: Unable to download webpage: HTTP Error 429: Too Many Requests (caused by <HTTPError 429: Too Many Requests>)
+[youtube] _fqZTZiI1sM: Downloading initial data API JSON
 [youtube] _fqZTZiI1sM: Downloading visionos player API JSON
+[youtube] _fqZTZiI1sM: Downloading iframe API JS
+[youtube] _fqZTZiI1sM: Downloading player 8c3fda2d-main
+[youtube] _fqZTZiI1sM: Downloading web player API JSON
 WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
 ERROR: [youtube] _fqZTZiI1sM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
 Download exit code: 1
 Download complete
 Files created:
-total 740
-drwxr-xr-x 5 runner runner   4096 Sep 13 21:43 .
-drwxr-xr-x 3 runner runner   4096 Sep 13 21:43 ..
--rw-r--r-- 1 runner runner    369 Sep 13 21:43 .bashrc
-drwxr-xr-x 2 runner runner   4096 Sep 13 21:43 .devcontainer
-drwxr-xr-x 7 runner runner   4096 Sep 13 21:43 .git
-drwxr-xr-x 3 runner runner   4096 Sep 13 21:43 .github
--rw-r--r-- 1 runner runner   7443 Sep 13 21:43 README.md
--rw-r--r-- 1 runner runner    128 Sep 13 21:43 config.json
--rw-r--r-- 1 runner runner   2375 Sep 13 21:43 download_log.txt
--rwxr-xr-x 1 runner runner   3999 Sep 13 21:43 download_metadata.sh
--rw-r--r-- 1 runner runner    176 Sep 13 21:43 download_results.json
--rw-r--r-- 1 runner runner    141 Sep 13 21:43 drive_result.json
--rw-r--r-- 1 runner runner     40 Sep 13 21:43 test.txt
--rw-r--r-- 1 runner runner     40 Sep 13 21:43 test_output.txt
--rw-r--r-- 1 runner runner   1088 Sep 13 21:43 test_yt_dlp.sh
--rw-r--r-- 1 runner runner   6199 Sep 13 21:43 trigger_download.js
--rw-r--r-- 1 runner runner    982 Sep 13 21:43 upload_log.txt
--rw-r--r-- 1 runner runner 656197 Sep 13 21:43 video_metadata.json
--rw-r--r-- 1 runner runner  11236 Sep 13 21:43 youtube_to_drive.sh
--rw-r--r-- 1 runner runner   4444 Sep 13 21:43 youtube_to_drive_test.sh
+total 752
+-rw-r--r-- 1 runner runner    856 Sep 13 21:56 "www.youtube.com_cookies.txt"
+drwxr-xr-x 5 runner runner   4096 Sep 13 21:56 .
+drwxr-xr-x 3 runner runner   4096 Sep 13 21:56 ..
+-rw-r--r-- 1 runner runner    369 Sep 13 21:56 .bashrc
+drwxr-xr-x 2 runner runner   4096 Sep 13 21:56 .devcontainer
+drwxr-xr-x 7 runner runner   4096 Sep 13 21:56 .git
+drwxr-xr-x 3 runner runner   4096 Sep 13 21:56 .github
+-rw-r--r-- 1 runner runner   7443 Sep 13 21:56 README.md
+-rw-r--r-- 1 runner runner    128 Sep 13 21:56 config.json
+-rw-r--r-- 1 runner runner   1725 Sep 13 21:56 download_log.txt
+-rwxr-xr-x 1 runner runner   4743 Sep 13 21:56 download_metadata.sh
+-rw-r--r-- 1 runner runner    176 Sep 13 21:56 download_results.json
+-rw-r--r-- 1 runner runner    141 Sep 13 21:56 drive_result.json
+-rw-r--r-- 1 runner runner     40 Sep 13 21:56 test.txt
+-rw-r--r-- 1 runner runner     40 Sep 13 21:56 test_output.txt
+-rw-r--r-- 1 runner runner   1088 Sep 13 21:56 test_yt_dlp.sh
+-rw-r--r-- 1 runner runner   6199 Sep 13 21:56 trigger_download.js
+-rw-r--r-- 1 runner runner    982 Sep 13 21:56 upload_log.txt
+-rw-r--r-- 1 runner runner 656197 Sep 13 21:56 video_metadata.json
+-rw-r--r-- 1 runner runner   2937 Sep 13 21:56 www.youtube.com_cookies.txt
+-rw-r--r-- 1 runner runner  11236 Sep 13 21:56 youtube_to_drive.sh
+-rw-r--r-- 1 runner runner   4444 Sep 13 21:56 youtube_to_drive_test.sh
 Uploading to Google Drive using API...
 No video file found to upload
 Listing all files in directory:
-total 744
-drwxr-xr-x 5 runner runner   4096 Sep 13 21:43 .
-drwxr-xr-x 3 runner runner   4096 Sep 13 21:43 ..
--rw-r--r-- 1 runner runner    369 Sep 13 21:43 .bashrc
-drwxr-xr-x 2 runner runner   4096 Sep 13 21:43 .devcontainer
-drwxr-xr-x 7 runner runner   4096 Sep 13 21:43 .git
-drwxr-xr-x 3 runner runner   4096 Sep 13 21:43 .github
--rw-r--r-- 1 runner runner   7443 Sep 13 21:43 README.md
--rw-r--r-- 1 runner runner    128 Sep 13 21:43 config.json
--rw-r--r-- 1 runner runner   3706 Sep 13 21:43 download_log.txt
--rwxr-xr-x 1 runner runner   3999 Sep 13 21:43 download_metadata.sh
--rw-r--r-- 1 runner runner    176 Sep 13 21:43 download_results.json
--rw-r--r-- 1 runner runner    141 Sep 13 21:43 drive_result.json
--rw-r--r-- 1 runner runner    508 Sep 13 21:43 gdrive_config.json
--rw-r--r-- 1 runner runner     40 Sep 13 21:43 test.txt
--rw-r--r-- 1 runner runner     40 Sep 13 21:43 test_output.txt
--rw-r--r-- 1 runner runner   1088 Sep 13 21:43 test_yt_dlp.sh
--rw-r--r-- 1 runner runner   6199 Sep 13 21:43 trigger_download.js
--rw-r--r-- 1 runner runner    982 Sep 13 21:43 upload_log.txt
--rw-r--r-- 1 runner runner 656197 Sep 13 21:43 video_metadata.json
--rw-r--r-- 1 runner runner  11236 Sep 13 21:43 youtube_to_drive.sh
--rw-r--r-- 1 runner runner   4444 Sep 13 21:43 youtube_to_drive_test.sh
+total 756
+-rw-r--r-- 1 runner runner    856 Sep 13 21:56 "www.youtube.com_cookies.txt"
+drwxr-xr-x 5 runner runner   4096 Sep 13 21:56 .
+drwxr-xr-x 3 runner runner   4096 Sep 13 21:56 ..
+-rw-r--r-- 1 runner runner    369 Sep 13 21:56 .bashrc
+drwxr-xr-x 2 runner runner   4096 Sep 13 21:56 .devcontainer
+drwxr-xr-x 7 runner runner   4096 Sep 13 21:56 .git
+drwxr-xr-x 3 runner runner   4096 Sep 13 21:56 .github
+-rw-r--r-- 1 runner runner   7443 Sep 13 21:56 README.md
+-rw-r--r-- 1 runner runner    128 Sep 13 21:56 config.json
+-rw-r--r-- 1 runner runner   3208 Sep 13 21:56 download_log.txt
+-rwxr-xr-x 1 runner runner   4743 Sep 13 21:56 download_metadata.sh
+-rw-r--r-- 1 runner runner    176 Sep 13 21:56 download_results.json
+-rw-r--r-- 1 runner runner    141 Sep 13 21:56 drive_result.json
+-rw-r--r-- 1 runner runner    508 Sep 13 21:56 gdrive_config.json
+-rw-r--r-- 1 runner runner     40 Sep 13 21:56 test.txt
+-rw-r--r-- 1 runner runner     40 Sep 13 21:56 test_output.txt
+-rw-r--r-- 1 runner runner   1088 Sep 13 21:56 test_yt_dlp.sh
+-rw-r--r-- 1 runner runner   6199 Sep 13 21:56 trigger_download.js
+-rw-r--r-- 1 runner runner    982 Sep 13 21:56 upload_log.txt
+-rw-r--r-- 1 runner runner 656197 Sep 13 21:56 video_metadata.json
+-rw-r--r-- 1 runner runner   2937 Sep 13 21:56 www.youtube.com_cookies.txt
+-rw-r--r-- 1 runner runner  11236 Sep 13 21:56 youtube_to_drive.sh
+-rw-r--r-- 1 runner runner   4444 Sep 13 21:56 youtube_to_drive_test.sh
