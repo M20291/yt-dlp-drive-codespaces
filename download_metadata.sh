@@ -14,8 +14,8 @@ if [ -n "$GDRIVE_CONFIG" ]; then
   VIDEO_FILE=$(ls -t video* 2>/dev/null | head -1)
   if [ -n "$VIDEO_FILE" ]; then
     echo "Found video file: $VIDEO_FILE"
-    # Upload file using Python script
-    python3 << EOF
+    # Upload file using Python script with logging to file
+    python3 << EOF 2>&1 | tee upload_log.txt
 import json
 import os
 import sys
