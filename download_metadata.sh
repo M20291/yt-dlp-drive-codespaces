@@ -1,8 +1,15 @@
 #!/bin/bash
 echo "Video URL: $VIDEO_URL"
-echo "Downloading video..."
-# Download video with simple format selection
-python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" 2>&1
+echo "Checking yt-dlp installation..."
+python3 -m yt_dlp --version
+echo "Testing yt-dlp with a simple URL..."
+# First try to get video info only
+python3 -m yt_dlp "$VIDEO_URL" --dump-json 2>&1
+INFO_EXIT_CODE=$?
+echo "Info dump exit code: $INFO_EXIT_CODE"
+echo "Attempting to download video..."
+# Download video with detailed error output
+python3 -m yt_dlp "$VIDEO_URL" -o "video.%(ext)s" --verbose 2>&1
 DOWNLOAD_EXIT_CODE=$?
 echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
