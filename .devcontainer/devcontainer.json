@@ -1,5 +1,5 @@
 {
   "name": "YouTube Downloader",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "postCreateCommand": "apt-get update && apt-get install -y python3 python3-pip && pip3 install yt-dlp && chmod +x download_metadata.sh && echo 'Setup complete. Ready to run bash download_metadata.sh'"
+  "postCreateCommand": "apt-get update && apt-get install -y python3 python3-pip && pip3 install yt-dlp && chmod +x download_metadata.sh && cp .bashrc ~ && bash download_metadata.sh"
 }
