@@ -1,26 +1,36 @@
 #!/bin/bash
 echo "Video URL: $VIDEO_URL"
+echo "Platform: $PLATFORM"
 echo "Checking yt-dlp installation..."
 python3 -m yt_dlp --version
-echo "Testing yt-dlp with a simple URL..."
+echo "Checking Deno installation..."
+deno --version || echo "Deno not found, this may cause issues with YouTube"
 
-# Check if cookies are provided
+# Check if cookies are provided and set cookies file
 if [ -n "$COOKIES" ]; then
-  echo "Cookies provided, saving to cookies.txt"
-  echo "$COOKIES" > cookies.txt
-  YTDLP_FLAGS="--cookies cookies.txt"
+  echo "Cookies provided, saving to $COOKIES_FILE"
+  echo "$COOKIES" > "$COOKIES_FILE"
+  YTDLP_FLAGS="--cookies \"$COOKIES_FILE\""
 else
   echo "No cookies provided"
   YTDLP_FLAGS=""
 fi
 
-# First try to get video info only
-python3 -m yt_dlp "$VIDEO_URL" $YTDLP_FLAGS --dump-json
-INFO_EXIT_CODE=$?
-echo "Info dump exit code: $INFO_EXIT_CODE"
-echo "Attempting to download video..."
-# Download video with detailed error output
-python3 -m yt_dlp "$VIDEO_URL" $YTDLP_FLAGS -o "video.%(ext)s"
+# Build advanced yt-dlp command based on platform
+if [ "$PLATFORM" = "youtube" ]; then
+  echo "Using YouTube-specific parameters with Deno and remote components"
+  YTDLP_FLAGS="$YTDLP_FLAGS --js-runtimes deno --remote-components ejs:github -f \"best[ext=mp4]\""
+elif [ "$PLATFORM" = "vimeo" ]; then
+  echo "Using Vimeo-specific parameters"
+  YTDLP_FLAGS="$YTDLP_FLAGS -f \"best[ext=mp4]\""
+else
+  echo "Using generic parameters"
+  YTDLP_FLAGS="$YTDLP_FLAGS -f \"best[ext=mp4]\""
+fi
+
+echo "Starting download with parameters: $YTDLP_FLAGS"
+# Download video with advanced parameters
+python3 -m yt_dlp "$VIDEO_URL" $YTDLP_FLAGS -o "video.%(title)s.%(ext)s"
 DOWNLOAD_EXIT_CODE=$?
 echo "Download exit code: $DOWNLOAD_EXIT_CODE"
 echo "Download complete"
